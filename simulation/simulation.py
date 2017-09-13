@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 ## settings
-add_noise = False
+add_poisson = True # Poisson noise in photon counting 
 N = 1 # number of particles per snapshot
 N_s = 100 # number of snapshots
 M_phi = 72 # number of azimuthal bins
@@ -21,6 +21,9 @@ for i_s in range(N_s):
     d1[d1>=360.] -= 360.
     hist2, bin_edges = np.histogram(d1, bins=M_phi, range=(0., 360.))
     snapshot = hist1 + hist2
+    if add_poisson:
+        snapshot1 = np.random.poisson(lam=snapshot)
+        snapshot = np.copy(snapshot1)
     snapshots.append(snapshot)
 
 bin_centers = 0.5*(bin_edges[:-1]+bin_edges[1:])
